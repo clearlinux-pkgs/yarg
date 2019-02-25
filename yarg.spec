@@ -4,7 +4,7 @@
 #
 Name     : yarg
 Version  : 0.1.9
-Release  : 1
+Release  : 2
 URL      : https://files.pythonhosted.org/packages/d4/c8/cc640404a0981e6c14e2044fc64e43b4c1ddf69e7dddc8f2a02638ba5ae8/yarg-0.1.9.tar.gz
 Source0  : https://files.pythonhosted.org/packages/d4/c8/cc640404a0981e6c14e2044fc64e43b4c1ddf69e7dddc8f2a02638ba5ae8/yarg-0.1.9.tar.gz
 Summary  : A semi hard Cornish cheese, also queries PyPI (PyPI client)
@@ -55,7 +55,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1551106991
+export SOURCE_DATE_EPOCH=1551110090
 export MAKEFLAGS=%{?_smp_mflags}
 python3 setup.py build
 
@@ -82,4 +82,6 @@ echo ----[ mark ]----
 
 %files python3
 %defattr(-,root,root,-)
+%exclude /usr/lib/python3.7/site-packages/tests/__init__.py
+%exclude /usr/lib/python3.7/site-packages/tests/__pycache__/__init__.cpython-37.pyc
 /usr/lib/python3*/*
