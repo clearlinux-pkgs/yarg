@@ -4,7 +4,7 @@
 #
 Name     : yarg
 Version  : 0.1.9
-Release  : 4
+Release  : 6
 URL      : https://files.pythonhosted.org/packages/d4/c8/cc640404a0981e6c14e2044fc64e43b4c1ddf69e7dddc8f2a02638ba5ae8/yarg-0.1.9.tar.gz
 Source0  : https://files.pythonhosted.org/packages/d4/c8/cc640404a0981e6c14e2044fc64e43b4c1ddf69e7dddc8f2a02638ba5ae8/yarg-0.1.9.tar.gz
 Summary  : A semi hard Cornish cheese, also queries PyPI (PyPI client)
@@ -18,7 +18,6 @@ BuildRequires : buildreq-distutils3
 BuildRequires : requests
 
 %description
-yarg(1) -- A semi hard Cornish cheese, also queries PyPI
 ========================================================
 
 %package license
@@ -49,39 +48,50 @@ python3 components for the yarg package.
 
 %prep
 %setup -q -n yarg-0.1.9
+cd %{_builddir}/yarg-0.1.9
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1551110090
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1574108014
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 export MAKEFLAGS=%{?_smp_mflags}
 python3 setup.py build
 
 %install
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/yarg
-cp LICENSE %{buildroot}/usr/share/package-licenses/yarg/LICENSE
-cp LICENSE-REQUESTS %{buildroot}/usr/share/package-licenses/yarg/LICENSE-REQUESTS
+cp %{_builddir}/yarg-0.1.9/LICENSE %{buildroot}/usr/share/package-licenses/yarg/7fb776523625a73facb05491ab93ca479279a26e
+cp %{_builddir}/yarg-0.1.9/LICENSE-REQUESTS %{buildroot}/usr/share/package-licenses/yarg/65075425649cfd8ff9e8bae57dea27249239ea6a
 python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
+## Remove excluded files
+rm -f %{buildroot}/usr/lib/python3.8/site-packages/tests/__init__.py
+rm -f %{buildroot}/usr/lib/python3.8/site-packages/tests/__pycache__/__init__.cpython-38.pyc
 
 %files
 %defattr(-,root,root,-)
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/yarg/LICENSE
-/usr/share/package-licenses/yarg/LICENSE-REQUESTS
+/usr/share/package-licenses/yarg/65075425649cfd8ff9e8bae57dea27249239ea6a
+/usr/share/package-licenses/yarg/7fb776523625a73facb05491ab93ca479279a26e
 
 %files python
 %defattr(-,root,root,-)
 
 %files python3
 %defattr(-,root,root,-)
-%exclude /usr/lib/python3.7/site-packages/tests/__init__.py
-%exclude /usr/lib/python3.7/site-packages/tests/__pycache__/__init__.cpython-37.pyc
 /usr/lib/python3*/*
